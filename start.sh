@@ -9,7 +9,7 @@ if ! test -f /hiveos-rig/hiveos.qcow2; then
 
   cd /hiveos-rig
   echo "Downloading HiveOS..."
-  curl -o hiveos.img.xz "https://download.hiveos.farm/$(curl 'https://download.hiveos.farm/VERSIONS.txt' 2>&1 | sed -rn 's/.*(hiveos-.*\.img\.xz)/\1/p' | head -1)"
+  curl -o hiveos.img.xz "https://download.hiveos.farm/history/$(curl 'https://download.hiveos.farm/VERSIONS.txt' 2>&1 | sed -rn 's/.*(hiveos-.*\.img\.xz)/\1/p' | head -1)"
   echo "Decompressing..."
   xz --decompress hiveos.img.xz
   echo "Converting to qcow2 and recompressing..."
@@ -60,7 +60,7 @@ exec qemu-system-x86_64 \
   -enable-kvm \
   -cpu host,check,enforce,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,l3-cache=on,-hypervisor,kvm=off,migratable=no,+invtsc,hv_vendor_id=1234567890ab \
   -machine type=q35 \
-  -drive if=pflash,format=raw,readonly,file=/usr/share/OVMF/OVMF_CODE.fd `# read-only UEFI bios` \
+  -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE.fd `# read-only UEFI bios` \
   -drive if=pflash,format=raw,file=qemu.nvram `# UEFI writeable NVRAM` \
   -rtc clock=host,base=localtime \
   -device qemu-xhci `# USB3 bus` \
